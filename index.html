@@ -66,8 +66,8 @@
     const inputNameEl = document.querySelector('.add-form-name');
     const textAreaEl = document.querySelector('.add-form-text');
 
-    let name = inputNameEl.value;
-    let text = textAreaEl.value;
+    const name = inputNameEl.value.trim();
+    const text = textAreaEl.value.trim();
 
     if (name === "" || text === "") return;
 
@@ -89,6 +89,9 @@
     commentTextEl.textContent = text;
 
     commentsEl.appendChild(newCommentEl);
+
+    inputNameEl.value = '';
+    textAreaEl.value = '';
 
   });
 </script>
