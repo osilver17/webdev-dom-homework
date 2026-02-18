@@ -10,7 +10,7 @@
 <body>
   <div class="container">
     <ul class="comments">
-      <li class="comment">
+      <!-- <li class="comment">
         <div class="comment-header">
           <div>Глеб Фокин</div>
           <div>12.02.22 12:18</div>
@@ -26,8 +26,8 @@
             <button class="like-button"></button>
           </div>
         </div>
-      </li>
-      <li class="comment">
+      </li> -->
+      <!-- <li class="comment">
         <div class="comment-header">
           <div>Варвара Н.</div>
           <div>13.02.22 19:22</div>
@@ -43,7 +43,7 @@
             <button class="like-button -active-like"></button>
           </div>
         </div>
-      </li>
+      </li> -->
     </ul>
     <div class="add-form">
       <input type="text" class="add-form-name" placeholder="Введите ваше имя" />
@@ -53,47 +53,8 @@
       </div>
     </div>
   </div>
+
+  <script src="script.js"></script>
 </body>
-
-<script>
-  "use strict";
-  const commentsEl = document.querySelector('.comments');
-  const commentEl = document.querySelector('.comment');
-  const buttonEl = document.querySelector('.add-form-button');
-  let likeCounter = 0;
-
-  buttonEl.addEventListener('click', function (e) {
-    const inputNameEl = document.querySelector('.add-form-name');
-    const textAreaEl = document.querySelector('.add-form-text');
-
-    const name = inputNameEl.value.trim();
-    const text = textAreaEl.value.trim();
-
-    if (name === "" || text === "") return;
-
-    const newCommentEl = commentEl.cloneNode(true);
-    const headerEl = newCommentEl.querySelector('.comment-header');
-    const commentTextEl = newCommentEl.querySelector('.comment-text');
-    const commentLikesNumberEl = newCommentEl.querySelector('.likes-counter');
-    commentLikesNumberEl.textContent = likeCounter;
-    const options = {
-      day: 'numeric',
-      month: '2-digit',
-      year: '2-digit',
-    };
-    const commentDate = new Date();
-    const commentFullTime = commentDate.toLocaleDateString('ru-RU', options) + " " + commentDate.toLocaleTimeString('ru-RU', { hour: '2-digit', minute: '2-digit' });
-
-    headerEl.firstElementChild.textContent = name;
-    headerEl.lastElementChild.textContent = commentFullTime;
-    commentTextEl.textContent = text;
-
-    commentsEl.appendChild(newCommentEl);
-
-    inputNameEl.value = '';
-    textAreaEl.value = '';
-
-  });
-</script>
 
 </html>
