@@ -39,9 +39,24 @@ function commentsRenderer() {
     
     const commentsEl = document.querySelector('.comments');
     commentsEl.innerHTML = resultComments;
+    addLikesListeners();
 }
 
 commentsRenderer();
+
+function addLikesListeners() {
+    const likesButtonsCollection = document.querySelectorAll('.like-button');
+    likesButtonsCollection.forEach(likeButton => {
+        likeButton.addEventListener('click', function (e) {
+            let index = likeButton.dataset.index;
+            let isLiked = comments[index].isLiked;
+            isLiked ? comments[index].likesCounter-- : comments[index].likesCounter++;
+            comments[index].isLiked = !comments[index].isLiked;
+            
+            commentsRenderer();
+        });
+    })
+}
 
 const dateOptions = {
     day: 'numeric',
@@ -54,37 +69,30 @@ const timeOptions = {
     minute: '2-digit',
 };
 
-// const commentsEl = document.querySelector('.comments');
-const commentEl = document.querySelector('.comment');
 const buttonEl = document.querySelector('.add-form-button');
 
-let likesCounter = 0;
-
 buttonEl.addEventListener('click', function (e) {
-    const inputNameEl = document.querySelector('.add-form-name');
-    const textAreaEl = document.querySelector('.add-form-text');
+    const inputNameForm = document.querySelector('.add-form-name');
+    const textAreaForm = document.querySelector('.add-form-text');
 
-    const name = inputNameEl.value.trim();
-    const text = textAreaEl.value.trim();
+    const name = inputNameForm.value.trim();
+    const comment = textAreaForm.value.trim();
 
-    if (name === "" || text === "") return;
-
-    const newCommentEl = commentEl.cloneNode(true);
-    const headerEl = newCommentEl.querySelector('.comment-header');
-    const commentTextEl = newCommentEl.querySelector('.comment-text');
-    const commentLikesNumberEl = newCommentEl.querySelector('.likes-counter');
-    commentLikesNumberEl.textContent = likesCounter;
+    if (name === "" || comment === "") return;
 
     const commentDate = new Date();
     const commentFullTime = commentDate.toLocaleDateString('ru-RU', dateOptions) + " " + commentDate.toLocaleTimeString('ru-RU', timeOptions);
 
-    headerEl.firstElementChild.textContent = name;
-    headerEl.lastElementChild.textContent = commentFullTime;
-    commentTextEl.textContent = text;
+    comments.push({
+        name: name,
+        dateTime: commentFullTime,
+        comment: comment,
+        isLiked: false,
+        likesCounter: 0,
+    })
 
-    commentsEl.appendChild(newCommentEl);
-
-    inputNameEl.value = '';
-    textAreaEl.value = '';
+    commentsRenderer();
+    inputNameForm.value = '';
+    textAreaForm.value = '';
 
 });
