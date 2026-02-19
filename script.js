@@ -125,11 +125,11 @@ formButton.addEventListener('click', function (e) {
         dataLikesCounter: 0,
     })
 
-    commentsRenderer("клик на кнопке формы");
+    commentsRenderer();
     formNameInput.value = '';
     formTextArea.value = '';
 
 });
 
 // Отрисовка данных в хранилище
-commentsRenderer("вызов в программе");
+commentsRenderer();
