@@ -57,8 +57,13 @@ function commentsRenderer() {
                 </li>`;
     }).join("");
 
+    // Находим элемент "комментарии"
     const commentsEl = document.querySelector('.comments');
+
+    // Отрисовка всех данных
     commentsEl.innerHTML = resultComments;
+    
+    // К отрисованным элементам прикрепляем слушателей кликов
     addCommentsListeners();
     addLikesListeners();
 }
@@ -89,9 +94,11 @@ function addCommentsListeners() {
             let itemIndex = item.dataset.index;
             let name = comments[itemIndex].dataName;
             let comment = comments[itemIndex].dataComment;
+
             let text = name + ": " + comment;
-            let textFormatted = `<<${text}>>`;
-            formTextArea.innerHTML = textFormatted;
+            let textFormatted = `"${text}"`;
+            
+            formTextArea.value = textFormatted;
         });
     })
 }
@@ -104,8 +111,8 @@ formButton.addEventListener('click', function (e) {
 
     if (name === "" || comment === "") return;
 
-    const nameWithoutTag = name.replace(/(<([^>]+)>)/gi, '');
-    const commentWithoutTag = comment.replace(/(<([^>]+)>)/gi, '');
+    const nameWithoutTag = name.replaceAll("<", "&lt").replaceAll(">", "&gt");
+    const commentWithoutTag = comment.replaceAll("<", "&lt").replaceAll(">", "&gt");
 
     const commentDate = new Date();
     const commentFullTime = commentDate.toLocaleDateString('ru-RU', dateOptions) + " " + commentDate.toLocaleTimeString('ru-RU', timeOptions);
@@ -118,11 +125,11 @@ formButton.addEventListener('click', function (e) {
         dataLikesCounter: 0,
     })
 
-    commentsRenderer();
+    commentsRenderer("клик на кнопке формы");
     formNameInput.value = '';
     formTextArea.value = '';
 
 });
 
 // Отрисовка данных в хранилище
-commentsRenderer();
+commentsRenderer("вызов в программе");
