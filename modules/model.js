@@ -1,5 +1,6 @@
 // Хранилище данных приложения
-export const comments = [
+
+const comments = [
     {
         dataName: "Глеб Фокин",
         dataDateTime: "12.02.22 12:18",
@@ -15,3 +16,5 @@ export const comments = [
         dataLikesCounter: 75,
     },
 ];
+
+export {comments};
