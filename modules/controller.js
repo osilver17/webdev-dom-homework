@@ -1,6 +1,7 @@
 
 import {commentsRenderer} from'./view.js';
 import {comments} from './model.js';
+import {sanitizeHTML} from './sanitizeHTML.js';
 
 // Объявляем глобальные переменные для полей формы 
 const formNameInput = document.querySelector('.add-form-name');
@@ -20,11 +21,6 @@ const timeOptions = {
     hour: '2-digit',
     minute: '2-digit',
 };
-
-// Функция удаления тегов при их вводе в форму
-function sanitizeHTML(value) {
-    return value.replaceAll("<", "&lt").replaceAll(">", "&gt");
-}
 
 // Функция привязки клика к кнопке формы
 formButton.addEventListener('click', function (e) {
