@@ -1,5 +1,5 @@
-import {comments} from './model.js';
-import {addCommentsListeners, addLikesListeners} from './controller.js';
+import { comments } from './model.js';
+import { addCommentsListeners, addLikesListeners } from './listeners.js';
 
 // Функция отрисовки комментариев:
 function commentsRenderer() {
@@ -17,7 +17,7 @@ function commentsRenderer() {
                     <div class="comment-footer">
                         <div class="likes">
                             <span class="likes-counter">${item.dataLikesCounter}</span>
-                            <button class="like-button ${item.dataIsLiked ? '-active-like' : ''}" data-index="${index}"></button>
+                            <button class="like-button${item.dataIsLiked ? ' -active-like' : ''}" data-index="${index}"></button>
                         </div>
                     </div>
                 </li>`;
@@ -28,10 +28,10 @@ function commentsRenderer() {
 
     // Отрисовка всех данных
     commentsEl.innerHTML = resultComments;
-    
+
     // К отрисованным элементам прикрепляем слушателей кликов
     addCommentsListeners();
     addLikesListeners();
 }
 
-export {commentsRenderer};
+export { commentsRenderer };

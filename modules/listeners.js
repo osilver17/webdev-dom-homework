@@ -1,14 +1,7 @@
 
-import {commentsRenderer} from'./view.js';
-import {comments} from './model.js';
-import {sanitizeHTML} from './sanitizeHTML.js';
-
-// Объявляем глобальные переменные для полей формы 
-const formNameInput = document.querySelector('.add-form-name');
-const formTextArea = document.querySelector('.add-form-text');
-
-// Объявляем глобальную переменную для кнопки формы 
-const formButton = document.querySelector('.add-form-button');
+import { commentsRenderer } from './view.js';
+import { comments } from './model.js';
+import { sanitizeHTML } from './sanitizeHTML.js';
 
 // Опции для преобразования дат и времени в комментариях
 const dateOptions = {
@@ -22,37 +15,45 @@ const timeOptions = {
     minute: '2-digit',
 };
 
-// Функция привязки клика к кнопке формы
-formButton.addEventListener('click', function (e) {
+function addComment() {
+    // Объявляем переменную для кнопки формы 
+    const formButton = document.querySelector('.add-form-button');
+    // Функция привязки клика к кнопке формы
+    formButton.addEventListener('click', function (e) {
+        const formNameInput = document.querySelector('.add-form-name');
+        const formTextArea = document.querySelector('.add-form-text');
 
-    const name = formNameInput.value.trim();
-    const comment = formTextArea.value.trim();
+        const name = formNameInput.value.trim();
+        const comment = formTextArea.value.trim();
 
-    if (name === "" || comment === "") return;
+        if (name === "" || comment === "") return;
 
-    const nameWithoutTag = sanitizeHTML(name);
-    const commentWithoutTag = sanitizeHTML(comment);
+        const nameWithoutTag = sanitizeHTML(name);
+        const commentWithoutTag = sanitizeHTML(comment);
 
-    const commentDate = new Date();
-    const commentFullTime = commentDate.toLocaleDateString('ru-RU', dateOptions) + " " + commentDate.toLocaleTimeString('ru-RU', timeOptions);
+        const commentDate = new Date();
+        const commentFullTime = commentDate.toLocaleDateString('ru-RU', dateOptions) + " " + commentDate.toLocaleTimeString('ru-RU', timeOptions);
 
-    comments.push({
-        dataName: nameWithoutTag,
-        dataDateTime: commentFullTime,
-        dataComment: commentWithoutTag,
-        dataIsLiked: false,
-        dataLikesCounter: 0,
-    })
+        comments.push({
+            dataName: nameWithoutTag,
+            dataDateTime: commentFullTime,
+            dataComment: commentWithoutTag,
+            dataIsLiked: false,
+            dataLikesCounter: 0,
+        })
 
-    commentsRenderer();
-    formNameInput.value = '';
-    formTextArea.value = '';
+        commentsRenderer();
+        formNameInput.value = '';
+        formTextArea.value = '';
 
-});
+    });
+}
+
 
 // Функция привязки клика к коментариям для их копирования в форму
 function addCommentsListeners() {
     const commentsCollection = document.querySelectorAll('.comment');
+    const formTextArea = document.querySelector('.add-form-text');
 
     commentsCollection.forEach(item => {
         item.addEventListener('click', function (e) {
@@ -62,7 +63,7 @@ function addCommentsListeners() {
 
             let text = name + ": " + comment;
             let textFormatted = `"${text}"`;
-            
+
             formTextArea.value = textFormatted;
         });
     })
@@ -85,4 +86,4 @@ function addLikesListeners() {
     })
 }
 
-export {addCommentsListeners, addLikesListeners};
+export { addComment, addCommentsListeners, addLikesListeners };
