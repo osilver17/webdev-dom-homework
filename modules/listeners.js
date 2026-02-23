@@ -1,7 +1,7 @@
 
-import { commentsRenderer } from './view.js';
 import { comments } from './model.js';
 import { sanitizeHTML } from './sanitizeHTML.js';
+import { commentsRenderer } from './view.js';
 
 // Опции для преобразования дат и времени в комментариях
 const dateOptions = {
@@ -31,18 +31,31 @@ function addComment() {
         const nameWithoutTag = sanitizeHTML(name);
         const commentWithoutTag = sanitizeHTML(comment);
 
-        const commentDate = new Date();
-        const commentFullTime = commentDate.toLocaleDateString('ru-RU', dateOptions) + " " + commentDate.toLocaleTimeString('ru-RU', timeOptions);
+        const commentDate = new Date().toISOString();
 
+        // Комментарий сначала добавляем в локальное хранилище
         comments.push({
-            dataName: nameWithoutTag,
-            dataDateTime: commentFullTime,
-            dataComment: commentWithoutTag,
-            dataIsLiked: false,
-            dataLikesCounter: 0,
+            author: { name: nameWithoutTag },
+            date: commentDate,
+            text: commentWithoutTag,
+            isLiked: false,
+            likes: 0,
         })
 
+        // Рендерим из локального хранилища
         commentsRenderer();
+
+        // Затем отправляем на сервер. Такая последовательность корректна?
+        fetch('https://wedev-api.sky.pro/api/v1/oleg-serebrennikov/comments', {
+            method: 'POST',
+            // headers: {
+            //     'Content-Type': 'application/json' // Устанавливаем заголовок для JSON
+            // },
+            body: JSON.stringify({ text: commentWithoutTag, name: nameWithoutTag })
+        })
+            .then((response) => console.log(response))
+            .catch((error) => console.log(error))
+
         formNameInput.value = '';
         formTextArea.value = '';
 
@@ -58,8 +71,8 @@ function addCommentsListeners() {
     commentsCollection.forEach(item => {
         item.addEventListener('click', function (e) {
             let itemIndex = item.dataset.index;
-            let name = comments[itemIndex].dataName;
-            let comment = comments[itemIndex].dataComment;
+            let name = comments[itemIndex].author.name;
+            let comment = comments[itemIndex].text;
 
             let text = name + ": " + comment;
             let textFormatted = `"${text}"`;
@@ -77,13 +90,13 @@ function addLikesListeners() {
         likeButton.addEventListener('click', function (e) {
             e.stopPropagation();
             let likeButtonIndex = likeButton.dataset.index;
-            let isLiked = comments[likeButtonIndex].dataIsLiked;
-            isLiked ? comments[likeButtonIndex].dataLikesCounter-- : comments[likeButtonIndex].dataLikesCounter++;
-            comments[likeButtonIndex].dataIsLiked = !comments[likeButtonIndex].dataIsLiked;
+            let isLiked = comments[likeButtonIndex].isLiked;
+            isLiked ? comments[likeButtonIndex].likes-- : comments[likeButtonIndex].likes++;
+            comments[likeButtonIndex].isLiked = !comments[likeButtonIndex].isLiked;
 
             commentsRenderer();
         });
     })
 }
 
-export { addComment, addCommentsListeners, addLikesListeners };
+export { addComment, addCommentsListeners, addLikesListeners, dateOptions, timeOptions };

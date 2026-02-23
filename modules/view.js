@@ -1,23 +1,23 @@
 import { comments } from './model.js';
-import { addCommentsListeners, addLikesListeners } from './listeners.js';
+import { addCommentsListeners, addLikesListeners, dateOptions, timeOptions } from './listeners.js';
 
 // Функция отрисовки комментариев:
 function commentsRenderer() {
     const resultComments = comments.map((item, index) => {
         return `<li class="comment" data-index="${index}">
                     <div class="comment-header">
-                        <div>${item.dataName}</div>
-                        <div>${item.dataDateTime}</div>
+                        <div>${item.author.name}</div>
+                        <div>${new Date(item.date).toLocaleDateString('ru-RU', dateOptions) + " " + new Date(item.date).toLocaleTimeString('ru-RU', timeOptions)}</div>
                     </div>
                     <div class="comment-body">
                         <div class="comment-text">
-                            ${item.dataComment}
+                            ${item.text}
                         </div>
                     </div>
                     <div class="comment-footer">
                         <div class="likes">
-                            <span class="likes-counter">${item.dataLikesCounter}</span>
-                            <button class="like-button${item.dataIsLiked ? ' -active-like' : ''}" data-index="${index}"></button>
+                            <span class="likes-counter">${item.likes}</span>
+                            <button class="like-button${item.isLiked ? ' -active-like' : ''}" data-index="${index}"></button>
                         </div>
                     </div>
                 </li>`;
