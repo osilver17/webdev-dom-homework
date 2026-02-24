@@ -23,16 +23,16 @@ function addComment() {
         const formNameInput = document.querySelector('.add-form-name');
         const formTextArea = document.querySelector('.add-form-text');
 
+        const name = formNameInput.value.trim();
+        const comment = formTextArea.value.trim();
+
+        if (name === "" || comment === "") return;
+
         // После захвата полей формы можем ее "спрятать" и показать лоадер
         const form = document.querySelector('.add-form');
         const commentLoader = document.querySelector('.comment-loader');
         form.style.display = 'none';
         commentLoader.style.display = 'block';
-
-        const name = formNameInput.value.trim();
-        const comment = formTextArea.value.trim();
-
-        if (name === "" || comment === "") return;
 
         const nameWithoutTag = sanitizeHTML(name);
         const commentWithoutTag = sanitizeHTML(comment);
