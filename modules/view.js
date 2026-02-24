@@ -2,8 +2,8 @@ import { comments } from './model.js';
 import { addCommentsListeners, addLikesListeners, dateOptions, timeOptions } from './listeners.js';
 
 // Функция отрисовки комментариев:
-function commentsRenderer() {
-    const resultComments = comments.map((item, index) => {
+function commentsRenderer(arr) {
+    const resultComments = arr.map((item, index) => {
         return `<li class="comment" data-index="${index}">
                     <div class="comment-header">
                         <div>${item.author.name}</div>

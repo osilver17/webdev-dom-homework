@@ -23,6 +23,12 @@ function addComment() {
         const formNameInput = document.querySelector('.add-form-name');
         const formTextArea = document.querySelector('.add-form-text');
 
+        // После захвата полей формы можем ее "спрятать" и показать лоадер
+        const form = document.querySelector('.add-form');
+        const commentLoader = document.querySelector('.comment-loader');
+        form.style.display = 'none';
+        commentLoader.style.display = 'block';
+
         const name = formNameInput.value.trim();
         const comment = formTextArea.value.trim();
 
@@ -42,8 +48,9 @@ function addComment() {
             likes: 0,
         })
 
-        // Рендерим из локального хранилища
-        commentsRenderer();
+        // // Рендерим из локального хранилища
+        // console.log('рендерим массив из локального хранилища после добавления нового комментария...');
+        // commentsRenderer(comments);
 
         // Затем отправляем на сервер. Такая последовательность корректна?
         fetch('https://wedev-api.sky.pro/api/v1/oleg-serebrennikov/comments', {
@@ -53,11 +60,19 @@ function addComment() {
             // },
             body: JSON.stringify({ text: commentWithoutTag, name: nameWithoutTag })
         })
-            .then((response) => console.log(response))
-            .catch((error) => console.log(error))
+            .then(() => fetch('https://wedev-api.sky.pro/api/v1/oleg-serebrennikov/comments'))
+            .then((response) => response.json())
+            .then((data) => data.comments)
+            .then((arr) => {
+                console.log('рендерим массив с сервера...');
+                commentsRenderer(arr);
+                formNameInput.value = '';
+                formTextArea.value = '';
 
-        formNameInput.value = '';
-        formTextArea.value = '';
+                form.style.display = '';
+                commentLoader.style.display = '';
+            })
+            .catch((error) => console.log(error))
 
     });
 }
@@ -82,6 +97,15 @@ function addCommentsListeners() {
     })
 }
 
+// Функция задержки для имитации загрузки лайков
+function delay(interval = 300) {
+    return new Promise((resolve) => {
+        setTimeout(() => {
+            resolve();
+        }, interval);
+    });
+}
+
 // Функция привязки клика к кнопкам лайков
 function addLikesListeners() {
     const likesButtonsCollection = document.querySelectorAll('.like-button');
@@ -89,12 +113,19 @@ function addLikesListeners() {
     likesButtonsCollection.forEach(likeButton => {
         likeButton.addEventListener('click', function (e) {
             e.stopPropagation();
+            // Прикрепляем к лайку анимированный стиль "-loading-like"
+            likeButton.classList.toggle('-loading-like');
             let likeButtonIndex = likeButton.dataset.index;
             let isLiked = comments[likeButtonIndex].isLiked;
-            isLiked ? comments[likeButtonIndex].likes-- : comments[likeButtonIndex].likes++;
-            comments[likeButtonIndex].isLiked = !comments[likeButtonIndex].isLiked;
+            delay(2000)
+                .then(() => {
+                    isLiked ? comments[likeButtonIndex].likes-- : comments[likeButtonIndex].likes++;
+                    comments[likeButtonIndex].isLiked = !comments[likeButtonIndex].isLiked;
+                    likeButton.classList.toggle('-loading-like');
+                    commentsRenderer(comments);
+                });
 
-            commentsRenderer();
+            
         });
     })
 }
