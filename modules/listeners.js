@@ -14,10 +14,11 @@ const timeOptions = {
     minute: '2-digit',
 };
 
+// Функция добавления нового комментария 
 function addComment() {
     // Объявляем переменную для кнопки формы
     const formButton = document.querySelector('.add-form-button');
-    
+
     // Функция привязки клика к кнопке формы
     formButton.addEventListener('click', function (e) {
         sendComment();
