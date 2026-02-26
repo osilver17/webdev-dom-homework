@@ -1,4 +1,4 @@
-import { comments } from './model.js';
+
 import { addCommentsListeners, addLikesListeners, dateOptions, timeOptions } from './listeners.js';
 
 // Функция отрисовки комментариев:

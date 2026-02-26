@@ -2,6 +2,12 @@ import { comments } from './model.js';
 import { commentsRenderer } from './view.js';
 import { sendComment } from './api.js';
 
+import { renewComments } from './model.js';
+import { sanitizeHTML } from './sanitizeHTML.js';
+
+const getLink = 'https://wedev-api.sky.pro/api/v1/oleg-serebrennikov/comments';
+const postLink = 'https://wedev-api.sky.pro/api/v1/oleg-serebrennikov/comments';
+
 // Опции для преобразования дат и времени в комментариях
 const dateOptions = {
     day: 'numeric',
@@ -16,12 +22,74 @@ const timeOptions = {
 
 // Функция добавления нового комментария 
 function addComment() {
+
     // Объявляем переменную для кнопки формы
     const formButton = document.querySelector('.add-form-button');
+    // Объявляем переменные для полей формы
+    const formNameInput = document.querySelector('.add-form-name');
+    const formTextArea = document.querySelector('.add-form-text');
 
     // Функция привязки клика к кнопке формы
     formButton.addEventListener('click', function (e) {
-        sendComment();
+        // Захватываем содержание полей формы
+        const name = formNameInput.value.trim();
+        const comment = formTextArea.value.trim();
+
+        // Проверяем корректность полей формы
+        if (name === '' || comment === '') {
+            alert('Заполните форму!');
+            return;
+        }
+
+        const nameWithoutTag = sanitizeHTML(name);
+        const commentWithoutTag = sanitizeHTML(comment);
+
+        // Прячем форму и показываем лоадер
+        const form = document.querySelector('.add-form');
+        const commentLoader = document.querySelector('.comment-loader');
+        form.style.display = 'none';
+        commentLoader.style.display = 'block';
+
+        (async () => {
+            let stop = false;
+            while (true) {
+                commentLoader.textContent = 'Комментарий добавляется...';
+                if (stop) break;
+                stop = await sendComment(postLink, getLink, commentWithoutTag, nameWithoutTag)
+                    .then((arr) => {
+                        console.log('сохраняем массив с сервера в локальное хранилище...');
+                        renewComments(arr);
+                        console.log('рендерим массив...');
+                        commentsRenderer(arr);
+
+                        // Очищаем поля формы
+                        formNameInput.value = '';
+                        formTextArea.value = '';
+
+                        // Показываем форму и прячем лоадер
+                        form.style.display = '';
+                        commentLoader.style.display = '';
+                        return true;
+                    })
+                    .catch(async (error) => {
+                        if (error.message.slice(0, 9) === 'Err: 500.') {
+                            commentLoader.textContent = 'Отказ сервера. Ждем 5 секунд и пробуем снова...';
+                            await new Promise((resolve) => {
+                                setTimeout(() => {
+                                    resolve();
+                                }, 5000);
+                            })
+                        }
+                        else {
+                            alert(error);
+                            // Показываем форму и прячем лоадер
+                            form.style.display = '';
+                            commentLoader.style.display = '';
+                            return true;
+                        }
+                    })
+            }
+        })();
     });
 }
 
@@ -32,12 +100,12 @@ function addCommentsListeners() {
 
     commentsCollection.forEach((item) => {
         item.addEventListener('click', function (e) {
-            let itemIndex = item.dataset.index;
-            let name = comments[itemIndex].author.name;
-            let comment = comments[itemIndex].text;
+            const itemIndex = item.dataset.index;
+            const name = comments[itemIndex].author.name;
+            const comment = comments[itemIndex].text;
 
-            let text = name + ': ' + comment;
-            let textFormatted = `"${text}"`;
+            const text = name + ': ' + comment;
+            const textFormatted = `"${text}"`;
 
             formTextArea.value = textFormatted;
         });
