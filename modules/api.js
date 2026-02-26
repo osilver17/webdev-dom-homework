@@ -1,7 +1,6 @@
 
 // Функция запроса данных с сервера и обновления локальных данных в модели
 function getComments(getLink) {
-
     return fetch(getLink)
         .then((response) => {
             if (response.status === 500) {

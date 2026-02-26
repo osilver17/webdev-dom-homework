@@ -5,9 +5,6 @@ import { sendComment } from './api.js';
 import { renewComments } from './model.js';
 import { sanitizeHTML } from './sanitizeHTML.js';
 
-const getLink = 'https://wedev-api.sky.pro/api/v1/oleg-serebrennikov/comments';
-const postLink = 'https://wedev-api.sky.pro/api/v1/oleg-serebrennikov/comments';
-
 // Опции для преобразования дат и времени в комментариях
 const dateOptions = {
     day: 'numeric',
@@ -21,7 +18,7 @@ const timeOptions = {
 };
 
 // Функция добавления нового комментария 
-function addComment() {
+function addComment(postLink, getLink) {
 
     // Объявляем переменную для кнопки формы
     const formButton = document.querySelector('.add-form-button');
@@ -151,5 +148,4 @@ export {
     addLikesListeners,
     dateOptions,
     timeOptions,
-    getLink,
 };
