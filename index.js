@@ -1,10 +1,8 @@
 "use strict";
 import { renewComments } from './modules/model.js';
 import { commentsRenderer } from './modules/view.js';
-import { addComment } from './modules/listeners.js';
+import { addComment, getLink } from './modules/listeners.js';
 import { getComments } from './modules/api.js';
-
-const getLink = 'https://wedev-api.sky.pro/api/v1/oleg-serebrennikov/comments';
 
 // Вызов функции получения всех комментариев
 getComments(getLink)

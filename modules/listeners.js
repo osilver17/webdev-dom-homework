@@ -151,4 +151,5 @@ export {
     addLikesListeners,
     dateOptions,
     timeOptions,
+    getLink,
 };
