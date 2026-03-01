@@ -1,6 +1,6 @@
 // Хранилище данных приложения
 
-let localComments = [
+const localComments = [
     {
         id: 1,
         author: { name: "Глеб Фокин" },
@@ -12,8 +12,8 @@ let localComments = [
 ];
 
 function renewComments(arr) {
-    localComments = arr;
-    return localComments;
+    localComments.length = 0;
+    localComments.push(...arr);
 }
 
 export {localComments, renewComments};

@@ -3,7 +3,6 @@ import { renderLogin } from './renderLogin.js';
 import { boxForComments, authorizationLink } from './appParts.js';
 import { localComments, renewComments } from './model.js';
 import { commentsRenderer } from './commentsRenderer.js';
-import { addComment } from './listeners.js';
 import { getComments } from './api.js';
 import { getLink } from './links.js';
 
@@ -16,8 +15,8 @@ function mainPage() {
     getComments(getLink)
         .then((comments) => {
             console.log('Обновляем массив локального хранилища comments от сервера...=', comments);
-            console.log(renewComments(comments));
-            console.log('рендерим массив из локального хранилища при начальной загрузке...');
+            renewComments(comments);
+            console.log('рендерим localComments из локального хранилища при начальной загрузке...=', localComments);
             commentsRenderer(localComments);
         })
         .catch((error) => console.log(error));
