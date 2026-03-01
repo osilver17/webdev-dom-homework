@@ -42,7 +42,6 @@ function sendComment(postLink, getLink, comment) {
         },
         body: JSON.stringify({
             text: comment,
-            forceError: true,
         }),
     })
         .then((response) => {
