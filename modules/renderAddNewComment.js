@@ -1,30 +1,18 @@
-export function renderAddComment() {
+import { commentsRenderer } from './commentsRenderer.js';
+import { boxForComments, getFormForNewComment } from './appParts.js';
+import { localComments } from './model.js';
+import { addComment } from './listeners.js';
+import { postLink, getLink } from './links.js';
+import { userName } from './user.js';
+
+
+export function renderAddNewComment() {
     
+    const app = document.getElementById('app');
+    app.innerHTML = boxForComments + getFormForNewComment(userName);
+    commentsRenderer(localComments);
 
-    app.innerHTML = `
-    <ul class="comments">
-        <p class="primory-loader">
-            Пожалуйста подождите. Загружаю комментарии...
-        </p>
-    </ul>
-
-    <p class="comment-loader">Комментарий добавляется...</p>
-
-    <div class="add-form">
-        <input
-            type="text"
-            class="add-form-name"
-            placeholder="Введите ваше имя"
-        />
-        <textarea
-            type="textarea"
-            class="add-form-text"
-            placeholder="Введите ваш коментарий"
-            rows="4"
-        ></textarea>
-        <div class="add-form-row">
-            <button class="add-form-button">Написать</button>
-        </div>
-    </div>`
+    // Вызов функции добавления нового комментария 
+    addComment(postLink, getLink);
 
 }

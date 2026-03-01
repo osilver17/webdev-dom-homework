@@ -1,6 +1,6 @@
 import { renderLogin } from './renderLogin.js';
 
-import { boxForComments, authorizationLink, formForNewComments } from './appParts.js';
+import { boxForComments, authorizationLink } from './appParts.js';
 import { localComments, renewComments } from './model.js';
 import { commentsRenderer } from './commentsRenderer.js';
 import { addComment } from './listeners.js';

@@ -1,4 +1,4 @@
-import {token} from './token.js';
+import {token} from './user.js';
 
 
 // Функция запроса данных с сервера.

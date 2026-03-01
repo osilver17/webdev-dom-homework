@@ -159,6 +159,10 @@ body {
     padding: 11px 22px;
 }
 
+.add-form-name {
+    background-color: rgb(231, 231, 231);
+}
+
 .enter-form-login,
 .enter-form-password {
     width: 250px;

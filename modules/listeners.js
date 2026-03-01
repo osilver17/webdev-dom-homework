@@ -1,7 +1,8 @@
-import { token, updateToken } from './token.js';
+import { token, updateToken, userName, updateUser } from './user.js';
 import { localComments, renewComments } from './model.js';
 
 import { commentsRenderer } from './commentsRenderer.js';
+import { renderAddNewComment } from './renderAddNewComment.js';
 import { sendComment, logIn } from './api.js';
 
 import { sanitizeHTML } from './sanitizeHTML.js';
@@ -20,6 +21,11 @@ const timeOptions = {
 
 // Асинхронная функция дожатия добавления комментария на сервер
 async function sendAndFetchComment(postLink, getLink, comment, name) {
+    // Объявляем переменные для полей формы
+    // const formNameInput = document.querySelector('.add-form-name');
+    const formTextArea = document.querySelector('.add-form-text');
+    const form = document.querySelector('.add-form');
+    const commentLoader = document.querySelector('.comment-loader');
     let stop = false;
     while (true) {
         commentLoader.textContent = 'Комментарий добавляется...';
@@ -32,7 +38,7 @@ async function sendAndFetchComment(postLink, getLink, comment, name) {
                 commentsRenderer(arr);
 
                 // Очищаем поля формы
-                formNameInput.value = '';
+                // formNameInput.value = '';
                 formTextArea.value = '';
 
                 // Показываем форму и прячем лоадер
@@ -80,16 +86,16 @@ function addComment(postLink, getLink) {
         }
 
         // Очищаем содержание полей формы от тегов
-        const nameWithoutTag = sanitizeHTML(name);
+        // const nameWithoutTag = sanitizeHTML(name);
         const commentWithoutTag = sanitizeHTML(comment);
 
         // Прячем форму и показываем лоадер
         const form = document.querySelector('.add-form');
         const commentLoader = document.querySelector('.comment-loader');
         formHider(form, commentLoader);
-        
+
         // Добавляем комментарий
-        sendAndFetchComment(postLink, getLink, commentWithoutTag, nameWithoutTag);
+        sendAndFetchComment(postLink, getLink, commentWithoutTag, name);
 
     });
 }
@@ -182,8 +188,8 @@ function initLoginListener(loginLink) {
     enterButtonElement.addEventListener('click', () => {
         const login = loginElement.value.trim();
         const password = passwordElement.value.trim();
-        
-        if(password === '' || login === '') {
+
+        if (password === '' || login === '') {
             alert("Введите логин и пароль!");
             return;
         }
@@ -194,12 +200,23 @@ function initLoginListener(loginLink) {
             password,
         )
             .then((res) => {
-                console.log(res.user.token);
+                console.log('res =', res);
                 
                 updateToken(res.user.token);
+                updateUser(res.user.name);
+                console.log('userName =', userName);
                 console.log('token =', token);
+                renderAddNewComment();
+            })
+            .catch((error) => alert(error))
+            .finally(() => {
+                if (token) {
+                    console.log('Токен есть!!!');
                 }
-            );
+                else {
+                    console.log('Токена нет!!!');
+                }
+            })
     })
 }
 

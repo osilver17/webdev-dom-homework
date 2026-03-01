@@ -11,12 +11,18 @@ export const authorizationLink = `
 <p class="authorize-link">Чтобы добавить комментарий, авторизуйтесь</p>
 </div>`
 
-export  const formForNewComments = `
+export function getFormForNewComment(userName) {
+    return `
+    <p class="comment-loader">
+        Пожалуйста подождите. Добавляю комментарий...
+    </p>
     <div class="add-form">
         <input
             type="text"
             class="add-form-name"
-            placeholder="Введите ваше имя"
+            placeholder="${userName}"
+            readonly
+            value="${userName}"
         />
         <textarea
             type="textarea"
@@ -28,3 +34,5 @@ export  const formForNewComments = `
             <button class="add-form-button">Написать</button>
         </div>
     </div>`
+}
+

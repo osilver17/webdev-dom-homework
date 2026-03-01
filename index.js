@@ -9,7 +9,5 @@ mainPage();
 
 // initLoginListener();
 
-// // // Вызов функции добавления нового комментария 
-// // addComment(postLink, getLink);
 
 
