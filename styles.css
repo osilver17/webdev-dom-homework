@@ -2,7 +2,7 @@ body {
     margin: 0;
 }
 
-.app {
+.container {
     font-family: Helvetica;
     color: #ffffff;
     display: flex;

@@ -3,7 +3,7 @@ import { renderLogin } from './modules/renderLogin.js';
 import { initLoginListener } from './modules/renderLogin.js';
 import { renderComments } from './modules/renderComments.js';
 import { renewComments } from './modules/model.js';
-import { commentsRenderer } from './modules/view.js';
+import { commentsRenderer } from './modules/commentsRenderer.js';
 import { addComment } from './modules/listeners.js';
 import { getComments } from './modules/api.js';
 

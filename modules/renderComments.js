@@ -1,3 +1,4 @@
+
 export function renderComments() {
     const app = document.getElementById('app');
 
