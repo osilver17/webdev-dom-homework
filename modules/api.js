@@ -141,14 +141,6 @@ function registration(regLink, login, name, password) {
                 throw new Error('Err: 500. Сервер сломался при попытке регистрации.');
             }
 
-            if (response.status === 400) {
-                throw new Error('Err: 400. Неправильный запрос при регистрации.');
-            }
-
-            if(response.status !== 201) {
-                throw new Error(`Err: ${response.status}. Что-то при регистрации пошло не так.`);
-            }
-
             return response;
         })
         .then((response) => response.json());

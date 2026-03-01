@@ -3,7 +3,8 @@ import { localComments, renewComments } from './model.js';
 
 import { commentsRenderer } from './commentsRenderer.js';
 import { renderAddNewComment } from './renderAddNewComment.js';
-import { sendComment, logIn } from './api.js';
+import { renderRegistration } from './renderRegistration.js';
+import { sendComment, logIn, registration } from './api.js';
 
 import { sanitizeHTML } from './sanitizeHTML.js';
 
@@ -183,7 +184,9 @@ function initLoginListener(loginLink) {
     const enterButtonElement = document.querySelector('.enter-form-button');
     const enterRegButtonElement = document.querySelector('.enterReg-form-button');
 
-    console.log(enterButtonElement);
+    console.log(enterRegButtonElement);
+
+    enterRegButtonElement.addEventListener('click', () => renderRegistration());
 
     enterButtonElement.addEventListener('click', () => {
         const login = loginElement.value.trim();
@@ -201,7 +204,7 @@ function initLoginListener(loginLink) {
         )
             .then((res) => {
                 console.log('res =', res);
-                
+
                 updateToken(res.user.token);
                 updateUser(res.user.name);
                 console.log('userName =', userName);
@@ -220,11 +223,65 @@ function initLoginListener(loginLink) {
     })
 }
 
+// Функция добавления слушателя для формы регистрации
+function initRegListener(regLink) {
+    const loginElement = document.querySelector('.reg-form-login');
+    const nameElement = document.querySelector('.reg-form-name');
+    const passwordElement = document.querySelector('.reg-form-password');
+    const regButtonElement = document.querySelector('.reg-form-button');
+
+    console.log(regButtonElement);
+
+    regButtonElement.addEventListener('click', () => {
+        const login = loginElement.value.trim();
+        const name = nameElement.value.trim();
+        const password = passwordElement.value.trim();
+
+        if (name === '' || login === '' || password === '') {
+            alert("Введите имя, логин и пароль!");
+            return;
+        }
+
+        registration(
+            regLink,
+            login,
+            name,
+            password
+        )
+            .then(res => {
+                console.log(res.error); // Здесь получаем сообщение об ошибке
+                if(res.error) throw new Error(res.error);
+                return res;
+            })
+            .then((res) => {
+                console.log('res =', res);
+
+                updateToken(res.user.token);
+                updateUser(res.user.name);
+                console.log('userName =', userName);
+                console.log('token =', token);
+                renderAddNewComment();
+
+                return res;
+            })
+            .catch((error) => alert(error.message))
+            .finally(() => {
+                if (token) {
+                    console.log('Токен есть!!!');
+                }
+                else {
+                    console.log('Токена нет!!!');
+                }
+            })
+    })
+}
+
 export {
     addComment,
     addCommentsListeners,
     addLikesListeners,
     initLoginListener,
+    initRegListener,
     dateOptions,
     timeOptions,
 };

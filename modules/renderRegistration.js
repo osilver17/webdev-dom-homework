@@ -1,4 +1,9 @@
-export function renderRegistration() {
+
+import {regLink} from './links.js'
+import {initRegListener} from './listeners.js'
+
+
+function renderRegistration() {
     const app = document.getElementById('app');
 
     app.innerHTML = `
@@ -23,4 +28,8 @@ export function renderRegistration() {
             <button class="reg-form-button">Отправить</button>
         </div>
     </div>`;
+
+    initRegListener(regLink);
 }
+
+export {renderRegistration};
