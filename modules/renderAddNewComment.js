@@ -1,5 +1,5 @@
 export function renderAddComment() {
-    const app = document.getElementById('app');
+    
 
     app.innerHTML = `
     <ul class="comments">

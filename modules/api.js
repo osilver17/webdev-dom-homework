@@ -1,6 +1,4 @@
-import {token} from './renderLogin.js';
-
-const regLink = 'https://wedev-api.sky.pro/api/user';
+import {token} from './token.js';
 
 
 // Функция запроса данных с сервера.

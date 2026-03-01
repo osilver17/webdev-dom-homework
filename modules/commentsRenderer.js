@@ -3,7 +3,7 @@ import { addCommentsListeners, addLikesListeners, dateOptions, timeOptions } fro
 
 // Функция отрисовки комментариев:
 function commentsRenderer(arr) {
-    const resultComments = arr.map((item, index) => {
+    const allComments = arr.map((item, index) => {
         return `<li class="comment" data-index="${index}">
                     <div class="comment-header">
                         <div>${item.author.name}</div>
@@ -27,7 +27,7 @@ function commentsRenderer(arr) {
     const commentsEl = document.querySelector('.comments');
 
     // Отрисовка всех данных
-    commentsEl.innerHTML = resultComments;
+    commentsEl.innerHTML = allComments;
 
     // К отрисованным элементам прикрепляем слушателей кликов
     addCommentsListeners();

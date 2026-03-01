@@ -1,8 +1,9 @@
-import { comments } from './model.js';
-import { commentsRenderer } from './commentsRenderer.js';
-import { sendComment } from './api.js';
+import { token, updateToken } from './token.js';
+import { localComments, renewComments } from './model.js';
 
-import { renewComments } from './model.js';
+import { commentsRenderer } from './commentsRenderer.js';
+import { sendComment, logIn } from './api.js';
+
 import { sanitizeHTML } from './sanitizeHTML.js';
 
 // Опции для преобразования дат и времени в комментариях
@@ -125,8 +126,8 @@ function addCommentsListeners() {
     commentsCollection.forEach((item) => {
         item.addEventListener('click', function (e) {
             const itemIndex = item.dataset.index;
-            const name = comments[itemIndex].author.name;
-            const comment = comments[itemIndex].text;
+            const name = localComments[itemIndex].author.name;
+            const comment = localComments[itemIndex].text;
 
             const text = name + ': ' + comment;
             const textFormatted = `"${text}"`;
@@ -155,24 +156,58 @@ function addLikesListeners() {
             // Прикрепляем к лайку анимированный стиль "-loading-like"
             likeButton.classList.toggle('-loading-like');
             const likeButtonIndex = likeButton.dataset.index;
-            const isLiked = comments[likeButtonIndex].isLiked;
+            const isLiked = localComments[likeButtonIndex].isLiked;
             delay(2000).then(() => {
                 isLiked
-                    ? comments[likeButtonIndex].likes--
-                    : comments[likeButtonIndex].likes++;
-                comments[likeButtonIndex].isLiked =
-                    !comments[likeButtonIndex].isLiked;
+                    ? localComments[likeButtonIndex].likes--
+                    : localComments[likeButtonIndex].likes++;
+                localComments[likeButtonIndex].isLiked =
+                    !localComments[likeButtonIndex].isLiked;
                 likeButton.classList.toggle('-loading-like');
-                commentsRenderer(comments);
+                commentsRenderer(localComments);
             });
         });
     });
+}
+
+// Функция добавления слушателей для формы логина
+function initLoginListener(loginLink) {
+    const loginElement = document.querySelector('.enter-form-login');
+    const passwordElement = document.querySelector('.enter-form-password');
+    const enterButtonElement = document.querySelector('.enter-form-button');
+    const enterRegButtonElement = document.querySelector('.enterReg-form-button');
+
+    console.log(enterButtonElement);
+
+    enterButtonElement.addEventListener('click', () => {
+        const login = loginElement.value.trim();
+        const password = passwordElement.value.trim();
+        
+        if(password === '' || login === '') {
+            alert("Введите логин и пароль!");
+            return;
+        }
+
+        logIn(
+            loginLink,
+            login,
+            password,
+        )
+            .then((res) => {
+                console.log(res.user.token);
+                
+                updateToken(res.user.token);
+                console.log('token =', token);
+                }
+            );
+    })
 }
 
 export {
     addComment,
     addCommentsListeners,
     addLikesListeners,
+    initLoginListener,
     dateOptions,
     timeOptions,
 };

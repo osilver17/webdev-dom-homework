@@ -14,6 +14,15 @@ body {
     min-height: 100vh;
 }
 
+.authorize-box {
+    height: 80px;
+    cursor: pointer;
+}
+
+.authorize-link {
+    padding-top: 20px;
+    text-decoration: underline;
+}
 .comments,
 .comment {
     margin: 0;

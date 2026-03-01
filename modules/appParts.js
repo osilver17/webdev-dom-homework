@@ -1,16 +1,17 @@
 
-export function renderComments() {
-    const app = document.getElementById('app');
+export const boxForComments = `
+<ul class="comments">
+    <p class="primary-loader">
+        Пожалуйста подождите. Загружаю комментарии...
+    </p>
+</ul>`
 
-    app.innerHTML = `
-    <ul class="comments">
-        <p class="primary-loader">
-            Пожалуйста подождите. Загружаю комментарии...
-        </p>
-    </ul>
+export const authorizationLink = `
+<div class="authorize-box">
+<p class="authorize-link">Чтобы добавить комментарий, авторизуйтесь</p>
+</div>`
 
-    <a class="comment-loader">Чтобы добавить комментарий, авторизуйтесь</a>
-
+export  const formForNewComments = `
     <div class="add-form">
         <input
             type="text"
@@ -27,4 +28,3 @@ export function renderComments() {
             <button class="add-form-button">Написать</button>
         </div>
     </div>`
-}
