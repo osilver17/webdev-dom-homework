@@ -1,6 +1,6 @@
 // Хранилище данных приложения
 
-let comments = [
+const comments = [
     // {
     //     id: 1,
     //     author: { name: "Глеб Фокин" },
@@ -12,7 +12,8 @@ let comments = [
 ];
 
 function renewComments(data) {
-    comments = data;
+    comments.length = 0;
+    comments.push(data);
 }
 
 export {comments, renewComments};

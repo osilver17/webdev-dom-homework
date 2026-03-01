@@ -2,7 +2,7 @@ body {
     margin: 0;
 }
 
-.container {
+.app {
     font-family: Helvetica;
     color: #ffffff;
     display: flex;
@@ -22,7 +22,9 @@ body {
 }
 
 .comment,
-.add-form {
+.add-form,
+.enter-form,
+.reg-form {
     width: 596px;
     box-sizing: border-box;
     background: radial-gradient(
@@ -114,7 +116,13 @@ body {
     animation: rotating 2s linear infinite;
 }
 
-.add-form {
+.enter,
+.reg {
+    text-align: center;
+}
+.add-form,
+.enter-form,
+.reg-form {
     padding: 20px;
     margin-top: 48px;
     display: flex;
@@ -122,16 +130,36 @@ body {
 }
 
 .add-form-name,
-.add-form-text {
+.add-form-text,
+.enter-form-login,
+.enter-form-password,
+.reg-form-name,
+.reg-form-login,
+.reg-form-password {
     font-size: 16px;
     font-family: Helvetica;
     border-radius: 8px;
     border: none;
 }
 
-.add-form-name {
+.add-form-name,
+.reg-form-name,
+.reg-form-login,
+.reg-form-password {
     width: 300px;
     padding: 11px 22px;
+}
+
+.enter-form-login,
+.enter-form-password {
+    width: 250px;
+    padding: 11px 22px;
+}
+
+.enter-form-password,
+.reg-form-login,
+.reg-form-password {
+    margin-top: 12px;
 }
 
 .add-form-text {
@@ -140,12 +168,20 @@ body {
     resize: none;
 }
 
-.add-form-row {
+.add-form-row,
+.reg-form-row {
     display: flex;
     justify-content: flex-end;
 }
+.enter-form-row {
+    display: flex;
+    justify-content: space-between;
+}
 
-.add-form-button {
+.add-form-button,
+.enter-form-button,
+.reg-form-button,
+.enterReg-form-button {
     margin-top: 24px;
     font-size: 24px;
     padding: 10px 20px;
@@ -155,6 +191,8 @@ body {
     cursor: pointer;
 }
 
-.add-form-button:hover {
-    opacity: 0.9;
+.add-form-button:hover, .enter-form-button:hover,
+.reg-form-button:hover,
+.enterReg-form-button:hover {
+    opacity: 0.8;
 }
