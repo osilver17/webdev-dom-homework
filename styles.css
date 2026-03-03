@@ -181,10 +181,14 @@ body {
     resize: none;
 }
 
-.add-form-row,
-.reg-form-row {
+.add-form-row {
     display: flex;
     justify-content: flex-end;
+}
+
+.reg-form-row {
+    display: flex;
+    justify-content: space-between;
 }
 .enter-form-row {
     display: flex;

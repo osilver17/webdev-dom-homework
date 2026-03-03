@@ -4,6 +4,7 @@ import { localComments, renewComments } from './model.js';
 import { commentsRenderer } from './commentsRenderer.js';
 import { renderAddNewComment } from './renderAddNewComment.js';
 import { renderRegistration } from './renderRegistration.js';
+import { renderLogin } from './renderLogin.js';
 import { sendComment, logIn, registration, getComments, likeToggler } from './api.js';
 
 import { sanitizeHTML } from './sanitizeHTML.js';
@@ -254,8 +255,9 @@ function initRegListener(regLink) {
     const nameElement = document.querySelector('.reg-form-name');
     const passwordElement = document.querySelector('.reg-form-password');
     const regButtonElement = document.querySelector('.reg-form-button');
+    const enterButtonElement = document.querySelector('.enter-form-button');
 
-    console.log(regButtonElement);
+    enterButtonElement.addEventListener('click', () => renderLogin());
 
     regButtonElement.addEventListener('click', () => {
         const login = loginElement.value.trim();

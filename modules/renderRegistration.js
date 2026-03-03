@@ -26,6 +26,7 @@ function renderRegistration() {
         ></input>
         <div class="reg-form-row">
             <button class="reg-form-button">Отправить</button>
+            <button class="enter-form-button">Войти</button>
         </div>
     </div>`;
 
