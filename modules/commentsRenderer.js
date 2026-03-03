@@ -1,5 +1,6 @@
 
 import { addCommentsListeners, addLikesListeners, dateOptions, timeOptions } from './listeners.js';
+import { likeToggleLink, getLink } from './links.js';
 
 // Функция отрисовки комментариев:
 function commentsRenderer(arr) {
@@ -31,7 +32,7 @@ function commentsRenderer(arr) {
 
     // К отрисованным элементам прикрепляем слушателей кликов
     addCommentsListeners();
-    addLikesListeners();
+    addLikesListeners(likeToggleLink, getLink);
 }
 
 export { commentsRenderer };

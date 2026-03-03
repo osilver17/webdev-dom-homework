@@ -1,4 +1,4 @@
-import {token} from './user.js';
+import { token } from './user.js';
 
 
 // Функция запроса данных с сервера.
@@ -19,7 +19,7 @@ function getComments(getLink) {
                 throw new Error('Err: 400. Неправильный запрос для чтения с сервера');
             }
 
-            if(response.status !== 200) {
+            if (response.status !== 200) {
                 throw new Error(`Err: ${response.status}. Что-то при запросе пошло не так.`);
             }
             return response;
@@ -51,13 +51,19 @@ function sendComment(postLink, getLink, comment) {
                 throw new Error('Err: 500. Сервер сломался при попытке добавления комментария.');
             }
 
-            if (response.status === 400) {
-                throw new Error('Err: 400. Неправильный запрос при добавлении комментария.');
-            }
+            // if (response.status === 400) {
+            //     throw new Error('Err: 400. Неправильный запрос при добавлении комментария.');
+            // }
 
-            if(response.status !== 201) {
-                throw new Error(`Err: ${response.status}. Что-то при запросе пошло не так.`);
-            }
+            // if (response.status !== 201) {
+            //     throw new Error(`Err: ${response.status}. Что-то при запросе пошло не так.`);
+            // }
+            return response.json();
+        })
+        .then(data => {
+            console.log(data);
+            console.log(data.error); // Здесь получаем сообщение об ошибке
+            if (data.error) throw new Error(data.error);
         })
         .then(() => getComments(getLink));
 }
@@ -83,7 +89,7 @@ function deleteComment(postLink, getLink, id) {
                 throw new Error('Err: 400. Неправильный запрос при удалении комментария.');
             }
 
-            if(response.status !== 201) {
+            if (response.status !== 201) {
                 throw new Error(`Err: ${response.status}. Что-то при запросе пошло не так.`);
             }
         })
@@ -109,11 +115,11 @@ function logIn(loginLink, login, password) {
             }
 
             if (response.status === 400) {
-                throw new Error('Err: 400. Неправильный запрос при входе.');
+                throw new Error('Неверный логин или пароль!');
             }
 
-            if(response.status !== 201) {
-                throw new Error(`Err: ${response.status}. Что-то при входе пошло не так.`);
+            if (response.status !== 201) {
+                throw new Error(`${response.status}. Что-то при входе пошло не так.`);
             }
 
             return response;
@@ -145,4 +151,36 @@ function registration(regLink, login, name, password) {
         .then((response) => response.json());
 }
 
-export { getComments, sendComment, deleteComment, logIn, registration };
+// Функция для переключения лайка.
+
+function likeToggler(likeToggleLink, commentId) {
+
+    const fullLikeToggleLink = likeToggleLink + `/${commentId}/toggle-like`;
+
+    return fetch(fullLikeToggleLink, {
+        method: 'POST',
+        headers: {
+            Authorization: `Bearer ${token}`,
+        }
+    })
+        .then((response) => {
+            console.log('При попытке лайка response.status =', response.status);
+
+            if (response.status === 500) {
+                throw new Error('Err: 500. Сервер сломался при попытке лайка.');
+            }
+
+            if (response.status === 401) {
+                throw new Error('Для возможности поставить лайк нужно авторизоваться!');
+            }
+
+            if (response.status !== 200) {
+                throw new Error(`Err: ${response.status}. Что-то при лайке пошло не так.`);
+            }
+
+            return response;
+        })
+        .then((response) => response.json());
+}
+
+export { getComments, sendComment, deleteComment, logIn, registration, likeToggler };

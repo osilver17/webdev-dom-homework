@@ -4,7 +4,7 @@ import { localComments, renewComments } from './model.js';
 import { commentsRenderer } from './commentsRenderer.js';
 import { renderAddNewComment } from './renderAddNewComment.js';
 import { renderRegistration } from './renderRegistration.js';
-import { sendComment, logIn, registration } from './api.js';
+import { sendComment, logIn, registration, getComments, likeToggler } from './api.js';
 
 import { sanitizeHTML } from './sanitizeHTML.js';
 
@@ -56,7 +56,7 @@ async function sendAndFetchComment(postLink, getLink, comment, name) {
                     })
                 }
                 else {
-                    alert(error);
+                    alert(error.message);
                     // Показываем форму и прячем лоадер
                     showForm(form, commentLoader);
                     return true;
@@ -154,7 +154,7 @@ function delay(interval = 300) {
 }
 
 // Функция привязки клика к кнопкам лайков
-function addLikesListeners() {
+function addLikesListeners(likeToggleLink, getLink) {
     const likesButtonsCollection = document.querySelectorAll('.like-button');
 
     likesButtonsCollection.forEach((likeButton) => {
@@ -163,16 +163,42 @@ function addLikesListeners() {
             // Прикрепляем к лайку анимированный стиль "-loading-like"
             likeButton.classList.toggle('-loading-like');
             const likeButtonIndex = likeButton.dataset.index;
-            const isLiked = localComments[likeButtonIndex].isLiked;
-            delay(2000).then(() => {
-                isLiked
-                    ? localComments[likeButtonIndex].likes--
-                    : localComments[likeButtonIndex].likes++;
-                localComments[likeButtonIndex].isLiked =
-                    !localComments[likeButtonIndex].isLiked;
-                likeButton.classList.toggle('-loading-like');
-                commentsRenderer(localComments);
-            });
+            const likeId = localComments[likeButtonIndex].id;
+
+            likeToggler(
+                likeToggleLink, likeId
+            )
+                .then((data) => {
+                    console.log(data);
+                }
+                )
+                .catch((error) => {
+                    console.log(error.message);
+                    alert(error.message);
+                }
+                )
+                .finally(() => {
+                    getComments(getLink)
+                        .then((arr) => {
+                            console.log('сохраняем массив с сервера в локальное хранилище...');
+                            renewComments(arr);
+                            commentsRenderer(localComments);
+                            likeButton.classList.toggle('-loading-like');
+                        })
+                        .catch((error) => console.log(error)
+                        )
+                })
+            // Здесь реализована логика имитации постановки лайка без запроса на сервер
+            // const isLiked = localComments[likeButtonIndex].isLiked;
+            // delay(2000).then(() => {
+            //     isLiked
+            //         ? localComments[likeButtonIndex].likes--
+            //         : localComments[likeButtonIndex].likes++;
+            //     localComments[likeButtonIndex].isLiked =
+            //         !localComments[likeButtonIndex].isLiked;
+            //     likeButton.classList.toggle('-loading-like');
+            //     commentsRenderer(localComments);
+            // });
         });
     });
 }
@@ -204,7 +230,6 @@ function initLoginListener(loginLink) {
         )
             .then((res) => {
                 console.log('res =', res);
-
                 updateToken(res.user.token);
                 updateUser(res.user.name);
                 console.log('userName =', userName);
@@ -250,7 +275,7 @@ function initRegListener(regLink) {
         )
             .then(res => {
                 console.log(res.error); // Здесь получаем сообщение об ошибке
-                if(res.error) throw new Error(res.error);
+                if (res.error) throw new Error(res.error);
                 return res;
             })
             .then((res) => {

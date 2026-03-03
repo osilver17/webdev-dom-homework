@@ -4,3 +4,5 @@ export const postLink = 'https://wedev-api.sky.pro/api/v2/oleg-serebrennikov/com
 
 export const loginLink = 'https://wedev-api.sky.pro/api/user/login';
 export const regLink = 'https://wedev-api.sky.pro/api/user';
+
+export const likeToggleLink = 'https://wedev-api.sky.pro/api/v2/oleg-serebrennikov/comments';
